@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Easy physics</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../ephysics.js" type="text/javascript"></script>
+        <script src="../render.js" type="text/javascript"></script>
+        <script src="keyboard.js" type="text/javascript"></script>
+
+    </head>
+
+    <body>
+    	<canvas id="canvas"  width="200px" height="200px" ></canvas>
+    </body>
+
+        <style type="text/css">
+      canvas { border: 1px solid black; 
+ }
+    </style>
+
+<script type="text/javascript">
+	var objects = [];
+	var rerder = new Render( document.getElementById('canvas') , objects);
+	var keyboard = new Keyboard();
+
+	var poly = new Polygon(new Vector(),0,[
+			new Vector(40,20),
+			new Vector(20,-20),
+			new Vector(-20,-40), 
+			new Vector(-20,20)
+		])
+
+	var line = new Line(null,0,[
+			new Vector(20,0),
+			new Vector(0,0),
+		]);
+
+	objects.push(poly);
+	objects.push(line);
+
+
+	function loop(){
+		line.position.x = Math.cos(performance.now()*0.002) *80;
+		controls();
+		rerder.render();
+		requestAnimationFrame(loop);
+		collision();
+	}
+
+	function controls(){
+		if (keyboard.pressed('W')){
+			poly.position.y +=1;
+		}
+
+		if (keyboard.pressed('S')){
+			poly.position.y -=1;
+		}
+
+		if (keyboard.pressed('A')){
+			poly.angle +=0.1;
+		}
+
+		if (keyboard.pressed('D')){
+			poly.angle -=0.1;
+		}
+
+	}
+
+	function collision(){
+		var p;
+		if (poly.testLine(line)){
+			console.log('collision');
+		}
+	}
+
+	loop();
+</script>
+</html>
